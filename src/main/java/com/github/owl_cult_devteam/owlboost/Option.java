@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 public sealed interface Option<T> {
     record Some<T>(T t) implements Option<T> {
         @Override
-        public T unwrap() throws UnwrapEmptyException {
+        public T unwrap() throws EmptyUnwrapException {
             return t;
         }
 
@@ -30,8 +30,8 @@ public sealed interface Option<T> {
 
     record None<T>() implements Option<T> {
         @Override
-        public T unwrap() throws UnwrapEmptyException {
-            throw new UnwrapEmptyException("Trying to unwrap empty Option");
+        public T unwrap() throws EmptyUnwrapException {
+            throw new EmptyUnwrapException("Trying to unwrap empty Option");
         }
 
         @Override
@@ -50,7 +50,7 @@ public sealed interface Option<T> {
         }
     }
 
-    T unwrap() throws UnwrapEmptyException;
+    T unwrap() throws EmptyUnwrapException;
     T unwrap_or(T t);
     T unwrap_or_null();
     T unwrap_or_else(Supplier<T> t);
