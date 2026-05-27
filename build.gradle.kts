@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.owl-cult-devteam"
-version = "1.0-SNAPSHOT"
+version = "v1.0.1"
 
 repositories {
     mavenCentral()
@@ -16,7 +16,7 @@ java {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        register<MavenPublication>("gpr") {
             from(components["java"])
         }
     }
@@ -25,11 +25,11 @@ publishing {
         maven {
             name = "GitHubPackages"
 
-            url = uri("https://github.com")
+            url = uri("https://maven.pkg.github.com/owl-cult-devteam/owlboost")
 
             credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user")?.toString()
-                password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key")?.toString()
+                username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
             }
         }
     }
