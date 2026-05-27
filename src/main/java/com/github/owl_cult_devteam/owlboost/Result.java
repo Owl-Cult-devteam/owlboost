@@ -1,12 +1,12 @@
 package com.github.owl_cult_devteam.owlboost;
 
-import com.github.owl_cult_devteam.owlboost.exceptions.*;
+import com.github.owl_cult_devteam.owlboost.exceptions.EmptyUnwrapException;
 
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
-public sealed interface Option<T> {
-    record Some<T>(T t) implements Option<T> {
+public sealed interface Result<T, E> {
+    record Ok<T, E>(T t) implements Result<T, E> {
         @Override
         public T unwrap() {
             return t;
@@ -26,17 +26,22 @@ public sealed interface Option<T> {
         public T unwrap_or_else(Supplier<T> _tSupplier) {
             return t;
         }
+
+        @Override
+        public E error() {
+            return null;
+        }
     }
 
-    record None<T>() implements Option<T> {
+    record Err<T, E>(E e) implements Result<T, E> {
         @Override
         public T unwrap() throws EmptyUnwrapException {
-            throw new EmptyUnwrapException("Trying to unwrap empty Option");
+            throw new EmptyUnwrapException("Unwrap failed on Result.Err: " + e);
         }
 
         @Override
-        public T unwrap_or(T t) {
-            return t;
+        public T unwrap_or(T _t) {
+            return _t;
         }
 
         @Override
@@ -48,10 +53,17 @@ public sealed interface Option<T> {
         public T unwrap_or_else(Supplier<T> tSupplier) {
             return tSupplier.get();
         }
+
+        @Override
+        public E error() {
+            return e;
+        }
     }
 
     T unwrap() throws EmptyUnwrapException;
     T unwrap_or(T t);
     T unwrap_or_null();
     T unwrap_or_else(Supplier<T> t);
+
+    E error();
 }
