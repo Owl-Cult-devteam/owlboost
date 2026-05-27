@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.owl-cult-devteam"
-version = "v1.0.1"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
