@@ -54,4 +54,8 @@ public sealed interface Option<T> {
     T unwrap_or(T t);
     T unwrap_or_null();
     T unwrap_or_else(Supplier<T> t);
+
+    static <T> Option<T> ofNullable(T t) {
+        return (t == null ? new Option.None<T>() : new Option.Some<T>(t));
+    }
 }
