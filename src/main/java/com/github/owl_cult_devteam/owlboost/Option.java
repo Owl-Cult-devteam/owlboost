@@ -26,6 +26,11 @@ public sealed interface Option<T> {
         public T unwrap_or_else(Supplier<T> _tSupplier) {
             return t;
         }
+
+        @Override
+        public T expect(String _s) {
+            return t;
+        }
     }
 
     record None<T>() implements Option<T> {
@@ -48,12 +53,19 @@ public sealed interface Option<T> {
         public T unwrap_or_else(Supplier<T> tSupplier) {
             return tSupplier.get();
         }
+
+        @Override
+        public T expect(String msg) throws EmptyExpectException {
+            throw new EmptyExpectException(msg);
+        }
     }
 
     T unwrap() throws EmptyUnwrapException;
     T unwrap_or(T t);
     T unwrap_or_null();
     T unwrap_or_else(Supplier<T> t);
+
+    T expect(String s) throws EmptyExpectException;
 
     static <T> Option<T> ofNullable(T t) {
         return (t == null ? new Option.None<T>() : new Option.Some<T>(t));
