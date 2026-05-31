@@ -31,6 +31,11 @@ public sealed interface Result<T, E> {
         public E error() {
             return null;
         }
+
+        @Override
+        public T expect(String _s) {
+            return t;
+        }
     }
 
     record Err<T, E>(E e) implements Result<T, E> {
@@ -58,12 +63,19 @@ public sealed interface Result<T, E> {
         public E error() {
             return e;
         }
+
+        @java.lang.Override
+        public T expect(String msg) throws RuntimeException {
+            throw new RuntimeException("Trying to unwrap Result.Err");
+        }
     }
 
     T unwrap() throws EmptyUnwrapException;
     T unwrap_or(T t);
     T unwrap_or_null();
     T unwrap_or_else(Supplier<T> t);
+
+    T expect(String msg) throws RuntimeException;
 
     E error();
 }
