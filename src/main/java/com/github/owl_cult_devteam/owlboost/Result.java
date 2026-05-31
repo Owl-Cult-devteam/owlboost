@@ -1,5 +1,6 @@
 package com.github.owl_cult_devteam.owlboost;
 
+import com.github.owl_cult_devteam.owlboost.exceptions.EmptyExpectException;
 import com.github.owl_cult_devteam.owlboost.exceptions.EmptyUnwrapException;
 
 import java.util.function.Supplier;
@@ -65,8 +66,8 @@ public sealed interface Result<T, E> {
         }
 
         @java.lang.Override
-        public T expect(String msg) throws RuntimeException {
-            throw new RuntimeException("Trying to unwrap Result.Err");
+        public T expect(String msg) throws EmptyExpectException {
+            throw new EmptyExpectException(msg);
         }
     }
 
@@ -75,7 +76,7 @@ public sealed interface Result<T, E> {
     T unwrap_or_null();
     T unwrap_or_else(Supplier<T> t);
 
-    T expect(String msg) throws RuntimeException;
+    T expect(String msg) throws EmptyExpectException;
 
     E error();
 }
